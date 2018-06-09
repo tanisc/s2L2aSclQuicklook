@@ -13,7 +13,9 @@ for f in flistt:
                 if "S2A_USER_PRD_MSIL2A_PDMC_" in f:
                     fname = os.path.join(sys.argv[1],f,f.replace("S2A_USER_PRD_MSIL2A_PDMC_","S2A_USER_MTD_SAFL2A_PDMC_").replace(".SAFE",".xml"))
                     dt = datetime.strptime(os.path.split(fname)[1][47:62],"%Y%m%dT%H%M%S")
+                    orbit = f[40:46]
                 if "S2A_MSIL2A_" in f:
+                    orbit = f[32:45]
                     fname = os.path.join(sys.argv[1],f,'GRANULE')
                     for g in os.listdir(fname):
                         if "L2A_" in g:
@@ -61,9 +63,9 @@ for j,fname in enumerate(flistr):
         nosnow = (raster == 5) + (raster == 4)
         img = np.dstack((snow.astype('uint8'),nosnow.astype('uint8'),(snow*0).astype('uint8')))
         raster = raster.astype('uint8')
-        mh.imsave(os.path.join(sys.argv[1],date.strftime('%Y%m%dT%H%M%S')+'_SCL.png'),raster*20)
-        mh.imsave(os.path.join(sys.argv[1],date.strftime('%Y%m%dT%H%M%S')+'_SNS.png'),img*255)
+        mh.imsave(os.path.join(sys.argv[1],date.strftime('%Y%m%dT%H%M%S')+orbit+'SCL.png'),raster*20)
+        mh.imsave(os.path.join(sys.argv[1],date.strftime('%Y%m%dT%H%M%S')+orbit+'SNS.png'),img*255)
     except:
         print 'Cannot read/write for ',
-        print date.strftime('%Y%m%dT%H%M%S')
+        print date.strftime('%Y%m%dT%H%M%S'+orbit)
         pass
